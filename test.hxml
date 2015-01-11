@@ -1,0 +1,4 @@
+-cp test
+-lib arguable
+-main halc.TestRunner
+-neko bin/test.n
