@@ -8,12 +8,12 @@ class HelpCommand extends Command {
 	static var instance:HelpCommand;
 
 	public function new() {
-		name = 'help';
+		super('help');
 		shortName = 'h';
 		usage = 'Shows a list of commands or help for one command';
 		action = function(c) {
 			HelpPrinter.showAppHelp(c);
-		}
+		};
 	}
 
 	static public function getInstance() {
@@ -46,8 +46,7 @@ class VersionPrinter {
 class HelpPrinter {
 
 	static inline var APP_HELP_TEMPLATE =
-"
-NAME:
+"NAME:
    ::name:: - ::usage::
 
 USAGE:
@@ -68,7 +67,22 @@ GLOBAL OPTIONS:
    ::end::::end::
 ";
 
-	static public function checkHelp(c:Context) {
+	static inline var COMMAND_HELP_TEMPLATE =
+"NAME:
+   ::name:: - ::usage::
+
+USAGE:
+   command ::name::::if (flags.length > 0):: [command options]::end:: [arguments...]::if (description.length > 0)::
+
+DESCRIPTION:
+   ::description::::end::::if (flags.length > 0)::
+
+OPTIONS:
+   ::foreach flags::::__current__::
+   ::end::::end::
+";
+
+	static public function checkHelp(c:Context):Bool {
 		var show:Bool = c.globalArg('help');
 
 		if (show) {
@@ -79,8 +93,29 @@ GLOBAL OPTIONS:
 		return false;
 	}
 
-	static public function showAppHelp(c : Context) {
+	static public function showAppHelp(c:Context) {
 		var tmpl = new Template(HelpPrinter.APP_HELP_TEMPLATE);
 		Sys.print(tmpl.execute(c.app));
+	}
+
+	static public function checkCommandHelp(c:Context, name:String):Bool {
+		var show:Bool = c.arg('help');
+
+		if (show) {
+			HelpPrinter.showCommandHelp(c, name);
+			return true;
+		}
+
+		return false;
+	}
+
+	static public function showCommandHelp(c:Context, name:String) {
+		for (command in c.app.commands) {
+			if (command.hasName(name)) {
+				var tmpl = new Template(HelpPrinter.COMMAND_HELP_TEMPLATE);
+				Sys.print(tmpl.execute(command));
+				return;
+			}
+		}
 	}
 }

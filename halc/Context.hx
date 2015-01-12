@@ -19,7 +19,7 @@ class Context {
 	}
 
 	public function args():Array<String> {
-		return flagSet.args();
+		return flagSet.args;
 	}
 
 	public function isSet(name:String):Bool {

@@ -117,6 +117,7 @@ class FlagSet {
 
 	var internal = new Map<String, Flag<Dynamic>>();
 	var argValues:ArgValues;
+	public var args = new Array<String>();
 
 	public function new(flags:Array<Flag<Dynamic>>) {
 		apply(flags);
@@ -124,15 +125,31 @@ class FlagSet {
 
 	public function parse(args:Array<String>) {
 		var filled = [];
-		for (arg in args) {
+		var length = args.length;
+		for (index in 0...length) {
+			var arg = args[index];
+			if (index == 0 && arg.charAt(0) != '-') {
+				this.args = args;
+				break;
+			}
+
 			filled.push(arg);
 
-			if (arg.charAt(0) == '-') {
-				var flag = internal.get(arg.substring(1));
+			if (arg.charAt(0) != '-') {
+				continue;
+			}
 
-				if (flag != null && flag.isBoolFlag()) {
-					filled.push('');
-				}
+			var positionToSeek = index + 2;
+			var flag = internal.get(arg.substring(1));
+			if (flag != null && flag.isBoolFlag()) {
+				filled.push('');
+				positionToSeek = index + 1;
+			}
+
+			if (positionToSeek < length && args[positionToSeek].charAt(0) != '-') {
+				filled = filled.concat(args.slice(index + 1, positionToSeek));
+				this.args = args.slice(positionToSeek);
+				break;
 			}
 		}
 
@@ -178,10 +195,6 @@ class FlagSet {
 		}
 
 		return arg;
-	}
-
-	public function args():Array<String> {
-		return argValues.invalid.map(function(arg) { return arg.name; });
 	}
 
 	function apply(flags:Array<Flag<Dynamic>>) {

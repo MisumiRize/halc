@@ -19,7 +19,6 @@ class App {
 	}
 
 	public function run(arguments:Array<String>) {
-
 		var helpCommand = HelpCommand.getInstance();
 		if (!hasCommand(helpCommand)) {
 			commands.push(helpCommand);
@@ -40,22 +39,61 @@ class App {
 			return;
 		}
 
+		var args = context.args();
+		if (args.length > 0) {
+			var c = getCommand(args[0]);
+			if (c != null) {
+				c.run(context);
+				return;
+			}
+		}
+
 		action(context);
 	}
 
-	function hasCommand(command:Command):Bool {
-		var match = commands.filter(function(c) { return c.name == command.name; });
-		return match.length != 0;
+	public function appendCommand(command:Command):App {
+		if (!hasCommand(command)) {
+			commands.push(command);
+		}
+
+		return this;
 	}
 
-	function hasFlag(flag:Flag<Dynamic>):Bool {
-		var match = flags.filter(function(f) { return f.name == flag.name; });
-		return match.length != 0;
-	}
-
-	function appendFlag(flag:Flag<Dynamic>) {
+	public function appendFlag(flag:Flag<Dynamic>):App {
 		if (!hasFlag(flag)) {
 			flags.push(flag);
 		}
+
+		return this;
+	}
+
+	function getCommand(name:String):Command {
+		for (c in commands) {
+			if (c.hasName(name)) {
+				return c;
+			}
+		}
+
+		return null;
+	}
+
+	function hasCommand(command:Command):Bool {
+		for (c in commands) {
+			if (c.hasName(command.name)) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	function hasFlag(flag:Flag<Dynamic>):Bool {
+		for (f in flags) {
+			if (f.name == flag.name) {
+				return true;
+			}
+		}
+
+		return false;
 	}
 }
