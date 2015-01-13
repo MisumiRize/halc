@@ -27,6 +27,7 @@ class Main {
 Write some Haxe code and build.
 
 ```sh
+-lib halc
 -lib arguable
 -main Main
 -neko myapp.n
