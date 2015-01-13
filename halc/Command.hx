@@ -8,8 +8,9 @@ class Command {
 	public var name:String;
 	public var shortName:String = '';
 	public var usage:String = '';
+	public var description:String = '';
 	public var action = function(c:Context):Void {};
-	var flags = new Array<Flag<Dynamic>>();
+	public var flags = new Array<Flag<Dynamic>>();
 
 	public function new(name:String) {
 		this.name = name;

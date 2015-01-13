@@ -160,10 +160,10 @@ class FlagSet {
 	public function value(name:String):FlagValue {
 		var flag = getFlag(name);
 		if (flag == null) {
-			return '';
+			return null;
 		}
 
-		var arg:Null<Arg> = lookupArg(name);
+		var arg:Arg = lookupArg(name);
 		if (arg == null) {
 			return Std.string(flag.value);
 		}
@@ -175,7 +175,7 @@ class FlagSet {
 		return arg.value;
 	}
 
-	public function lookupArg(name:String):Null<Arg> {
+	public function lookupArg(name:String):Arg {
 		if (argValues == null) {
 			return null;
 		}
@@ -186,7 +186,7 @@ class FlagSet {
 		}
 
 		var keys = flag.getNames();
-		var arg:Null<Arg> = null;
+		var arg:Arg = null;
 		for (key in keys) {
 			arg = getArg(key);
 			if (arg != null) {
@@ -206,12 +206,12 @@ class FlagSet {
 		}
 	}
 
-	function getFlag(name:String):Null<Flag<Dynamic>> {
+	function getFlag(name:String):Flag<Dynamic> {
 		var flagName = Flag.prependPrefix(name);
 		return internal.get(flagName);
 	}
 
-	function getArg(name:String):Null<Arg> {
+	function getArg(name:String):Arg {
 		var argName = Flag.prependPrefix(name);
 		return argValues.get(argName);
 	}

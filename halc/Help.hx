@@ -60,7 +60,7 @@ AUTHOR: ::if (author.length > 0)::
    ::email::::end::::end::
 
 COMMANDS:
-   ::foreach commands::::name::::if (shortName.length > 0)::, ::shortName::::end:: \t::usage::
+   ::foreach commands::::__current__.name::::if (__current__.shortName.length > 0)::, ::__current__.shortName::::end:: \t::__current__.usage::
    ::end::::if (flags.length > 0)::
 GLOBAL OPTIONS:
    ::foreach flags::::__current__::
@@ -95,7 +95,16 @@ OPTIONS:
 
 	static public function showAppHelp(c:Context) {
 		var tmpl = new Template(HelpPrinter.APP_HELP_TEMPLATE);
-		Sys.print(tmpl.execute(c.app));
+		var app = c.app;
+		Sys.print(tmpl.execute({
+			name: app.name,
+			usage: app.usage,
+			commands: app.commands,
+			flags: app.flags,
+			version: app.version,
+			author: app.author,
+			email: app.email,
+		}));
 	}
 
 	static public function checkCommandHelp(c:Context, name:String):Bool {
@@ -113,7 +122,12 @@ OPTIONS:
 		for (command in c.app.commands) {
 			if (command.hasName(name)) {
 				var tmpl = new Template(HelpPrinter.COMMAND_HELP_TEMPLATE);
-				Sys.print(tmpl.execute(command));
+				Sys.print(tmpl.execute({
+					name: command.name,
+					usage: command.usage,
+					description: command.description,
+					flags: command.flags,
+				}));
 				return;
 			}
 		}
