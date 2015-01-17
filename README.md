@@ -16,13 +16,16 @@ HALC is currently avaiable on neko.
 
 ```haxe
 class Main {
-	var app = new halc.App({
-		name:'myapp',
-		action:function(c:halc.Context) {
-			trace('Hello, world!');
-		},
-	});
-	app.run(Sys.args());
+
+	static public function main() {
+		var app = new halc.App({
+			name:'myapp',
+			action:function(c:halc.Context) {
+				trace('Hello, world!');
+			},
+		});
+		app.run(Sys.args());
+	}
 }
 ```
 
