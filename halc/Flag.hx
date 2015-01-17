@@ -3,8 +3,8 @@ package halc;
 import arguable.ArgParser;
 
 class Flag<T> {
-	public var name:String;
-	public var value:T;
+	public var name(default, null):String;
+	public var value(default, null):T;
 	var usage:String;
 
 	public function new(name:String, value:T, usage:String) {

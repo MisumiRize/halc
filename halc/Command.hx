@@ -3,17 +3,31 @@ package halc;
 import halc.Flag;
 import halc.Help;
 
+typedef CommandConfig = {
+	name:String,
+	?shortName:String,
+	usage:String,
+	?description:String,
+	action:Context -> Void,
+	?flags:Array<Flag<Dynamic>>,
+}
+
 class Command {
 
-	public var name:String;
-	public var shortName:String = '';
-	public var usage:String = '';
-	public var description:String = '';
-	public var action = function(c:Context):Void {};
-	public var flags = new Array<Flag<Dynamic>>();
+	public var name(default, null):String;
+	public var shortName(default, null) = '';
+	public var usage(default, null):String;
+	public var description(default, null) = '';
+	public var action(default, null):Context -> Void;
+	public var flags(default, null) = new Array<Flag<Dynamic>>();
 
-	public function new(name:String) {
-		this.name = name;
+	public function new(config:CommandConfig) {
+		name = config.name;
+		shortName = (config.shortName != null) ? config.shortName : shortName;
+		usage = config.usage;
+		description = (config.description != null) ? config.description : description;
+		action = config.action;
+		flags = (config.flags != null) ? config.flags : flags;
 	}
 
 	public function run(context:Context) {

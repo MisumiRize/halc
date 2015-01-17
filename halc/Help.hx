@@ -8,12 +8,14 @@ class HelpCommand extends Command {
 	static var instance:HelpCommand;
 
 	public function new() {
-		super('help');
-		shortName = 'h';
-		usage = 'Shows a list of commands or help for one command';
-		action = function(c) {
-			HelpPrinter.showAppHelp(c);
-		};
+		super({
+			name:'help',
+			shortName:'h',
+			usage:'Shows a list of commands or help for one command',
+			action:function(c) {
+				HelpPrinter.showAppHelp(c);
+			},
+		});
 	}
 
 	static public function getInstance() {

@@ -5,10 +5,12 @@ class AppTest extends haxe.unit.TestCase {
 	public function testRun() {
 		var s = '';
 
-		var app = new App('');
-		app.action = function(c) {
-			s = s + c.args()[0];
-		}
+		var app = new App({
+			name:'',
+			action:function(c) {
+				s = s + c.args()[0];
+			},
+		});
 
 		app.run(['foo']);
 		app.run(['bar']);
@@ -16,14 +18,20 @@ class AppTest extends haxe.unit.TestCase {
 	}
 
 	public function testCommand() {
-		var command = new Command('foo');
 		var run = false;
-		command.action = function(c) {
-			run = true;
-		};
+		var command = new Command({
+			name:'foo',
+			usage:'',
+			description:'',
+			action:function(c) {
+				run = true;
+			},
+		});
 
-		var app = new App('');
-		app.action = function (c) {};
+		var app = new App({
+			name:'',
+			action: function (c) {},
+		});
 		app.appendCommand(command);
 
 		app.run(['bar']);

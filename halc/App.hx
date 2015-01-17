@@ -3,19 +3,37 @@ package halc;
 import halc.Flag;
 import halc.Help;
 
+typedef AppConfig = {
+	name:String,
+	?usage:String,
+	?version:String,
+	?commands:Array<Command>,
+	?flags:Array<Flag<Dynamic>>,
+	?action:Context -> Void,
+	?author:String,
+	?email:String,
+};
+
 class App {
 
-	public var name:String;
-	public var usage = 'A new cli application';
-	public var version = '0.0.0';
-	public var commands = new Array<Command>();
-	public var flags = new Array<Flag<Dynamic>>();
-	public var action = HelpCommand.getInstance().action;
-	public var author = 'Author';
-	public var email = 'unknown@email';
+	public var name(default, null):String;
+	public var usage(default, null) = 'A new cli application';
+	public var version(default, null) = '0.0.0';
+	public var commands(default, null) = new Array<Command>();
+	public var flags(default, null) = new Array<Flag<Dynamic>>();
+	public var action(default, null) = HelpCommand.getInstance().action;
+	public var author(default, null) = 'Author';
+	public var email(default, null) = 'unknown@email';
 
-	public function new(name:String) {
-		this.name = name;
+	public function new(config:AppConfig) {
+		name = config.name;
+		usage = (config.usage != null) ? config.usage : usage;
+		version = (config.version != null) ? config.version : version;
+		commands = (config.commands != null) ? config.commands : commands;
+		flags = (config.flags != null) ? config.flags : flags;
+		action = (config.action != null) ? config.action : action;
+		author = (config.author != null) ? config.author : author;
+		email = (config.email != null) ? config.email : email;
 	}
 
 	public function run(arguments:Array<String>) {

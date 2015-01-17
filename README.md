@@ -12,14 +12,16 @@ $ haxelib git halc https://github.com/MisumiRize/halc.git
 
 ## Usage
 
-HALC is currently avaiable on cpp and neko.
+HALC is currently avaiable on neko.
 
 ```haxe
 class Main {
-	var app = new halc.App('myapp');
-	app.action = function(c:halc.Context) {
-		trace('Hello, world!');
-	};
+	var app = new halc.App({
+		name:'myapp',
+		action:function(c:halc.Context) {
+			trace('Hello, world!');
+		},
+	});
 	app.run(Sys.args());
 }
 ```
