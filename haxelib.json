@@ -1,0 +1,13 @@
+{
+	"name": "halc",
+    "url": "https://github.com/MisumiRize/halc",
+	"license": "MIT",
+	"tags": [],
+	"description": "Library for creating CLI application",
+    "releasenote": "Initial release",
+	"version": "0.0.1",
+	"contributors": [ "Rize MISUMI" ],
+	"dependencies": {
+        "arguable": ""
+    }
+}
